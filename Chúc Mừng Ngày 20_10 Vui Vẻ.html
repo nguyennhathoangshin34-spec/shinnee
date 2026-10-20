@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chúc Mừng Ngày 20/10 Vui Vẻ</title>
+<style>
+/* ===== 1. MÀU SẮC (pink theme) – đổi ở đây để thay giao diện ===== */
+:root{
+  --bg1:#ffe3ef; --bg2:#ffc2dc; --pink:#ff5fa2; --pink-d:#d63384; --text:#8a1c52;
+  --card:#ffffffee; --robot:#fff0f7; --curtain:#c41e3a;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg1:#3a1428; --bg2:#5a1f3d; --text:#ffd6e8; --card:#4a1a33ee; --robot:#ffe3ef; }
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+@supports (height:100dvh){html,body{height:100dvh}} /* chiều cao chuẩn trên mobile (không bị thanh địa chỉ che) */
+*{box-sizing:border-box}
+body{margin:0;height:100%;overflow:hidden;font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+  background:radial-gradient(circle at 12% 18%,#ffffffaa 0 5%,transparent 5.5%),radial-gradient(circle at 85% 25%,#ffd1e6cc 0 7%,transparent 7.5%),radial-gradient(circle at 75% 80%,#ffffff88 0 6%,transparent 6.5%),radial-gradient(circle at 20% 85%,#ff9ec688 0 8%,transparent 8.5%),radial-gradient(ellipse at 50% 120%,#ff7fb5 0,transparent 60%),linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--text);cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+
+/* ===== 2. HIỆU ỨNG NỀN: tim, hoa, kim tuyến (JS tạo phần tử .fx) ===== */
+.fx{position:fixed;top:-40px;pointer-events:none;z-index:1;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+.conf{width:8px;height:14px;border-radius:2px}
+
+/* ===== 3. KHUNG CHÍNH ===== */
+#stage{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:16px}
+h1{margin:0;font-size:clamp(17px,4.5vw,34px);text-align:center;color:var(--pink-d);text-shadow:0 2px 0 #fff8;animation:pop 2s ease-in-out infinite}
+@keyframes pop{50%{transform:scale(1.06)}}
+
+/* ===== 4. ROBOT ===== */
+#robot{animation:float 3s ease-in-out infinite;display:flex;flex-direction:column;align-items:center}
+@keyframes float{50%{transform:translateY(-12px)}}
+.antenna{width:6px;height:26px;background:var(--pink);border-radius:3px;position:relative}
+.antenna::after{content:"";position:absolute;top:-12px;left:-7px;width:20px;height:20px;border-radius:50%;background:#ff2f87;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.3}}
+.head{width:210px;height:160px;background:var(--robot);border:6px solid var(--pink);border-radius:60px;position:relative;box-shadow:0 10px 25px #ff5fa255}
+.head::before,.head::after{content:"";position:absolute;top:55px;width:16px;height:40px;background:var(--pink);border-radius:8px}
+.head::before{left:-20px}.head::after{right:-20px}
+.cheek{position:absolute;top:92px;width:30px;height:16px;border-radius:50%;background:#ff9ec6;opacity:.8}
+.cheek.l{left:18px}.cheek.r{right:18px}
+/* Mắt: chớp mắt, đảo mắt, mắt trái tim */
+.eye{position:absolute;top:38px;width:38px;height:38px;background:#fff;border:4px solid #7a2250;border-radius:50%;overflow:hidden;animation:eyeblink 4s infinite}
+.eye.l{left:38px}.eye.r{right:38px}
+.eye i{position:absolute;top:8px;left:8px;width:18px;height:18px;background:#7a2250;border-radius:50%;animation:look 5s infinite}
+@keyframes eyeblink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes look{0%,100%{transform:translateX(0)}30%{transform:translateX(6px)}60%{transform:translateX(-6px)}}
+.head.love .eye{background:none;border:none;animation:none;overflow:visible;font-size:0}
+.head.love .eye i{background:none;width:auto;height:auto;top:0;left:0;animation:beat .6s infinite;font-style:normal;font-size:38px;line-height:38px}
+.head.love .eye i::before{content:"💗"}
+@keyframes beat{50%{transform:scale(1.25)}}
+/* Miệng: khi robot nói thì đóng/mở */
+.mouth{position:absolute;bottom:22px;left:50%;width:44px;height:14px;margin-left:-22px;background:#7a2250;border-radius:0 0 30px 30px;transition:.2s}
+.talking .mouth{animation:talk .28s infinite alternate}
+@keyframes talk{to{height:28px;border-radius:50%}}
+.body{width:130px;height:70px;margin-top:6px;background:var(--robot);border:6px solid var(--pink);border-radius:30px;display:flex;align-items:center;justify-content:center;font-size:30px;animation:beat 1.2s infinite}
+
+/* ===== 5. LỜI CHÚC (chữ chạy từng ký tự) ===== */
+#bubble{max-width:min(560px,84vw);min-height:86px;background:var(--card);border:3px dashed var(--pink);border-radius:26px;padding:16px 22px;text-align:center;font-size:clamp(17px,3.6vw,24px);line-height:1.5;font-weight:600;box-shadow:0 8px 20px #ff5fa233}
+#hint{font-size:14px;opacity:.75;animation:blink 1.4s infinite}
+/* Khung lời chúc trôi nổi quanh màn hình (biến --dx, --dy được JS đổi ngẫu nhiên mỗi câu) */
+.slide{animation:slidein .5s, wander 9s ease-in-out .5s infinite}
+@keyframes wander{0%,100%{transform:translate(0,0) rotate(-1.5deg)}25%{transform:translate(var(--dx,4vw),calc(var(--dy,4vh)*-1)) rotate(2deg)}50%{transform:translate(calc(var(--dx,4vw)*-1),var(--dy,4vh)) rotate(-2deg)}75%{transform:translate(calc(var(--dx,4vw)*.5),calc(var(--dy,4vh)*.6)) rotate(1deg)}}
+/* Chữ chúc nhỏ bay lơ lửng khắp màn hình */
+.word{position:fixed;z-index:3;pointer-events:none;font-weight:800;color:var(--pink-d);white-space:nowrap;text-shadow:0 2px 0 #fff9;animation:drift ease-in-out forwards}
+@keyframes drift{0%{opacity:0;transform:translate(0,0) scale(.6)}15%{opacity:1}50%{transform:translate(var(--mx),-50px) rotate(6deg) scale(1.1)}85%{opacity:1}100%{opacity:0;transform:translate(var(--mx2),-130px) rotate(-6deg) scale(.8)}}
+/* Nền chủ đề 20/10: chữ 20/10 khổng lồ mờ + vòng hoa ở bốn góc */
+body::before{content:"20/10";position:fixed;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;font-size:36vmin;font-weight:900;color:#fff;opacity:.28;pointer-events:none;animation:glow 5s ease-in-out infinite}
+@keyframes glow{50%{opacity:.14;transform:scale(1.05)}}
+.corner{position:fixed;z-index:2;font-size:clamp(28px,6vw,48px);line-height:1;pointer-events:none;animation:sway 4s ease-in-out infinite}
+.tl{top:calc(6px + env(safe-area-inset-top,0px));left:6px;transform-origin:top left}
+.tr{top:calc(6px + env(safe-area-inset-top,0px));right:6px;transform-origin:top right}
+.bl{bottom:calc(6px + env(safe-area-inset-bottom,0px));left:6px;transform-origin:bottom left}
+.br{bottom:calc(6px + env(safe-area-inset-bottom,0px));right:6px;transform-origin:bottom right}
+@keyframes sway{50%{transform:rotate(6deg) scale(1.08)}}
+#mus{position:fixed;top:calc(64px + env(safe-area-inset-top,0px));right:64px;z-index:20;width:44px;height:44px;border-radius:50%;border:3px solid var(--pink);background:var(--card);font-size:20px;cursor:pointer}
+/* ===== MOBILE: thu nhỏ robot, khung chữ và khoảng cách cho màn hình nhỏ / màn hình ngắn ===== */
+#bubble{overflow-wrap:anywhere}
+@media (max-width:480px),(max-height:700px){ #robot{zoom:.78} #stage{gap:12px} #bubble{min-height:70px;padding:12px 16px} }
+@media (max-height:600px){ #robot{zoom:.62} #stage{gap:8px} }
+@media (max-height:520px){ h1{font-size:15px} #robot{zoom:.5} #stage{gap:6px} #bubble{min-height:46px;padding:8px 14px;font-size:15px} #hint{font-size:12px} }
+/* Nút bật/tắt âm thanh */
+#snd{position:fixed;top:calc(64px + env(safe-area-inset-top,0px));right:12px;z-index:20;width:44px;height:44px;border-radius:50%;border:3px solid var(--pink);background:var(--card);font-size:20px;cursor:pointer}
+@keyframes slidein{from{opacity:0;transform:translateX(40px)}}
+
+/* ===== 6. MÀN KẾT: HAI RÈM ĐỎ ĐÓNG LẠI ===== */
+.curtain{position:fixed;top:0;bottom:0;width:50%;z-index:10;transition:transform 2.2s cubic-bezier(.6,0,.3,1);
+  background:repeating-linear-gradient(90deg,#a3122c 0 18px,var(--curtain) 18px 40px,#e04258 40px 52px);box-shadow:0 0 40px #0006}
+#cl{left:0;transform:translateX(-100%)}#cr{right:0;transform:translateX(100%)}
+.closed #cl,.closed #cr{transform:none}
+#finale{position:fixed;inset:0;z-index:11;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;
+  font-size:clamp(26px,7vw,52px);font-weight:800;color:#fff;text-shadow:0 3px 10px #000a;opacity:0;pointer-events:none;transition:opacity 1.2s 1.8s}
+.closed #finale{opacity:1}
+</style>
+</head>
+<body>
+<div class="corner tl">🌹🌸🌷</div><div class="corner tr">🌷🌸🌹</div>
+<div class="corner bl">🌺🌸💐</div><div class="corner br">💐🌸🌺</div>
+<div id="stage">
+  <h1>🌸 Chúc Mừng Ngày Quốc Tế Phụ Nữ 🌸</h1>
+  <div id="robot">
+    <div class="antenna"></div>
+    <div class="head" id="head"><div class="eye l"><i></i></div><div class="eye r"><i></i></div>
+      <div class="cheek l"></div><div class="cheek r"></div><div class="mouth"></div></div>
+    <div class="body">💖</div>
+  </div>
+  <div id="bubble"></div>
+  <div id="hint">👆 Chạm vào màn hình để bắt đầu</div>
+</div>
+<button id="mus" title="Chọn nhạc nền từ máy của bạn">🎵</button><input type="file" id="musFile" accept="audio/*" hidden>
+<button id="snd" title="Bật/tắt âm thanh">🔊</button>
+<div class="curtain" id="cl"></div><div class="curtain" id="cr"></div>
+<div id="finale">Chúc Bác Bạn Nữ<br>20/10 Vui Vẻ🚣‍♀️</div>
+
+<script>
+/* ===== A. NỘI DUNG LỜI CHÚC – thêm/sửa câu ở đây (love:true = mắt trái tim) ===== */
+const scenes = [
+  {t:"Hôm nay con nhận được tín hiệu từ vũ trụ là để… 🛸", love:false},
+  {t:"Ui mẹ đẹp quá! 😍", love:true},
+  {t:"Thì hôm nay cũng là ngày 20/10 rồi 🌷", love:false},
+  {t:"Nên là con muốn… 💌", love:true},
+  {t:"Chúc mẹ thật nhiều sức khỏe. 🍀", love:false},
+  {t:"Chúc mẹ thật xinh đẹp. 🌸", love:true},
+  {t:"Và chúc mẹ luôn giữ được nụ cười trên môi. 😊", love:true},
+  {t:"Chúc mẹ luôn hạnh phúc . 🌟", love:false},
+  {t:"Mẹ lun đóa hoa hồng và zui zẻ. 🚀", love:false},
+  {t:"Hôm nay con rất vui chút mẹ ngày 20/10 thật vui vẻ. 💐", love:true},
+  {t:"Mong mẹ luôn giữ được sức khỏe và mãi mãi vui vẻ như ngày hôm nay. 💖", love:true}
+];
+const bubble = document.getElementById("bubble"), head = document.getElementById("head"),
+      hint = document.getElementById("hint"), robot = document.getElementById("robot");
+let idx = -1, typing = false, timer = null, ended = false;
+const finalText = "Chúc Các Bạn Nữ 20/10 Vui Vẻ";
+
+/* ===== A2. ÂM THANH: nhạc hộp du dương (tự tạo bằng WebAudio) + robot đọc lời chúc ===== */
+let ac = null, master = null, soundOn = true, nextT = 0, mStep = 0, bgm = null;
+// 4 hợp âm C – Am – F – G, chơi rải nốt như nhạc hộp
+const chords = [[261.63,329.63,392,523.25],[220,261.63,329.63,440],[174.61,220,261.63,349.23],[196,246.94,293.66,392]];
+const pat = [0,1,2,3,2,1,2,1];
+function tone(f, t, d, v){
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = "triangle"; o.frequency.value = f;
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+  o.connect(g); g.connect(master); o.start(t); o.stop(t + d + .05);
+}
+function startMusic(){
+  if (ac) return;
+  try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ return; }
+  master = ac.createGain(); master.gain.value = soundOn ? 1 : 0; master.connect(ac.destination);
+  nextT = ac.currentTime + .1;
+  setInterval(() => {
+    while (nextT < ac.currentTime + .6){
+      const c = chords[Math.floor(mStep / 8) % 4];
+      tone(c[pat[mStep % 8]] * 2, nextT, 1.1, .07);              // giai điệu
+      if (mStep % 8 === 0) tone(c[0] / 2, nextT, 3.2, .09);      // nốt trầm nền
+      mStep++; nextT += .45;
+    }
+  }, 200);
+}
+function stripEmoji(t){ try { return t.replace(new RegExp("[\\p{Extended_Pictographic}\\uFE0F]", "gu"), ""); } catch(e){ return t; } } // an toàn cho trình duyệt cũ
+const VOICE_ON = true; // đổi thành true nếu muốn robot đọc to lời chúc
+function say(text){
+  if (!VOICE_ON || !soundOn || !window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(stripEmoji(text));
+  u.lang = "vi-VN"; u.rate = .95; u.pitch = 1.8;                 // giọng cao, dễ thương
+  // Ưu tiên giọng nữ tiếng Việt (HoaiMy, Linh, Google...), tránh giọng nam (An, NamMinh)
+  const vi = speechSynthesis.getVoices().filter(x => x.lang.toLowerCase().startsWith("vi"));
+  const v = vi.find(x => /hoaimy|linh|google|female|nữ/i.test(x.name)) || vi.find(x => !/namminh|\ban\b|male|nam\b/i.test(x.name)) || vi[0];
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+document.getElementById("snd").addEventListener("click", e => {
+  e.stopPropagation(); startMusic(); soundOn = !soundOn;
+  e.currentTarget.textContent = soundOn ? "🔊" : "🔇";
+  if (master) master.gain.value = (soundOn && !bgm) ? 1 : 0;
+  if (bgm) bgm.muted = !soundOn;
+  if (!soundOn && window.speechSynthesis) speechSynthesis.cancel();
+});
+
+/* ===== A2b. CHỌN NHẠC NỀN TỪ MÁY (file mp3 của bạn) – sẽ thay nhạc hộp, phát lặp lại ===== */
+const mus = document.getElementById("mus"), musFile = document.getElementById("musFile");
+mus.addEventListener("click", e => { e.stopPropagation(); musFile.click(); });
+musFile.addEventListener("click", e => e.stopPropagation());
+musFile.addEventListener("change", () => {
+  const f = musFile.files[0]; if (!f) return;
+  if (bgm) bgm.pause();
+  bgm = new Audio(URL.createObjectURL(f)); bgm.loop = true; bgm.volume = .7; bgm.muted = !soundOn;
+  startMusic(); if (master) master.gain.value = 0;   // tắt nhạc hộp mặc định
+  bgm.play().catch(() => {});
+});
+
+/* ===== A3. CHỮ CHÚC NHỎ BAY LƠ LỬNG ===== */
+const words = ["Xinh đẹp 💖","Hạnh phúc 🌸","Yêu thương 💕","Thành công ✨","Luôn cười tươi 😊","Sức khỏe 🌷","20/10 💐","Bình an 🎀","Rạng rỡ 🌟"];
+function spawnWord(){
+  const e = document.createElement("div"); e.className = "word";
+  e.textContent = words[Math.floor(Math.random() * words.length)];
+  e.style.left = (5 + Math.random() * 65) + "vw"; e.style.top = (10 + Math.random() * 75) + "vh";
+  e.style.fontSize = (16 + Math.random() * 16) + "px";
+  e.style.setProperty("--mx", (Math.random() * 30 - 15) + "vw"); e.style.setProperty("--mx2", (Math.random() * 50 - 25) + "vw");
+  const d = 7 + Math.random() * 3; e.style.animationDuration = d + "s";
+  document.body.appendChild(e); setTimeout(() => e.remove(), d * 1000);
+}
+setInterval(spawnWord, 2400);
+
+/* ===== B. HIỆU ỨNG RƠI: tim, hoa, kim tuyến ===== */
+const icons = ["💖","💗","🌸","🌷","💕","🌺"], colors = ["#ff5fa2","#ffd166","#fff","#ff9ec6","#c77dff"];
+function spawn(){
+  const e = document.createElement("div"); e.className = "fx";
+  e.style.left = Math.random()*100 + "vw";
+  e.style.animationDuration = (5 + Math.random()*6) + "s";
+  if (Math.random() < .35){ // kim tuyến
+    e.classList.add("conf"); e.style.background = colors[Math.floor(Math.random()*colors.length)];
+  } else {                  // tim hoặc hoa
+    e.textContent = icons[Math.floor(Math.random()*icons.length)];
+    e.style.fontSize = (16 + Math.random()*22) + "px";
+  }
+  document.body.appendChild(e); setTimeout(() => e.remove(), 11500);
+}
+setInterval(spawn, 350);
+function burst(){ for (let i = 0; i < 25; i++) setTimeout(spawn, i*40); } // bùng nổ khi chuyển cảnh
+
+/* ===== C. ROBOT NÓI: chữ chạy từng ký tự + miệng mở/đóng ===== */
+function speak(s){
+  clearInterval(timer); bubble.textContent = ""; typing = true;
+  head.classList.add("talking"); head.classList.toggle("love", s.love);
+  say(s.t);                                                   // robot đọc to lời chúc
+  bubble.style.setProperty("--dx", (Math.random() * 12 - 6) + "vw");   // đổi hướng trôi của khung chữ
+  bubble.style.setProperty("--dy", (Math.random() * 12 - 6) + "vh");
+  bubble.classList.remove("slide"); void bubble.offsetWidth; bubble.classList.add("slide");
+  const chars = [...s.t]; let i = 0;
+  timer = setInterval(() => {
+    bubble.textContent += chars[i++];
+    if (i >= chars.length) finish();
+  }, 55);
+}
+function finish(){ clearInterval(timer); bubble.textContent = scenes[idx].t; typing = false; head.classList.remove("talking");
+  hint.textContent = idx === scenes.length-1 ? "👆 Chạm để xem điều bất ngờ cuối cùng" : "👆 Chạm để tiếp tục"; }
+
+/* ===== D. MÀN KẾT THÚC: rèm đỏ đóng lại ===== */
+function ending(){
+  ended = true; burst(); document.body.classList.add("closed"); say(finalText);
+  setTimeout(() => { hint.textContent = ""; }, 100);
+  setTimeout(() => { document.addEventListener(TAP, restart, {once:true}); }, 4500); // chạm lần nữa để xem lại
+}
+function restart(){ document.body.classList.remove("closed"); ended = false; idx = -1; hint.textContent = "👆 Chạm vào màn hình để bắt đầu"; bubble.textContent = ""; }
+
+/* ===== E. CLICK ĐỂ CHUYỂN CẢNH ===== */
+const TAP = window.PointerEvent ? "pointerup" : "click";   // pointerup chạy ổn trên màn hình cảm ứng
+document.addEventListener(TAP, e => {
+  if (e.target.closest && e.target.closest("button,input")) return;   // bấm nút thì không chuyển cảnh
+  startMusic();                              // trình duyệt chỉ cho phát nhạc sau khi người dùng chạm
+  if (ended) return;
+  if (typing) { finish(); return; }          // đang gõ → hiện đủ câu ngay
+  if (idx === scenes.length-1) { ending(); return; }
+  idx++; burst(); speak(scenes[idx]);
+});
+</script>
+</body>
+</html>
